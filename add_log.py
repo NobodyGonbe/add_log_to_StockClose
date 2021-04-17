@@ -23,11 +23,11 @@ if __name__ == '__main__':
     # コマンドラインで使うための設定
     parser = argparse.ArgumentParser(description = 'YahooファイナンスからDLしたCSVに前日終値と当日終値から対数を計算した列を追加')
     parser.add_argument('-d', '--dir', required = True, help = 'ダウンロードしたcsvファイルが含まれるディレクトリ')
-    parser.add_argument('-dn', '--dirname', default = '対数追加済み', help = '編集後のCSVを入れるフォルダ名')
+    parser.add_argument('-ed', '--export_dir', default = '対数追加済み', help = '編集後のCSVを入れるディレクトリ')
     args = parser.parse_args()
 
     # 保存先のパス
-    export_dir = os.path.join(args.dir, args.dirname)
+    export_directory = os.path.join(args.dir, args.export_dir)
 
     # 選択したディレクトリからCSVファイルだけを検索
     for file_path in glob.glob(os.path.join(args.dir, '*.csv')):
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         stock_csv = add_log(pd.read_csv(file_path))
         if stock_csv is None:
             continue
-        if not os.path.exists(export_dir):
-            os.makedirs(export_dir)
+        if not os.path.exists(export_directory):
+            os.makedirs(export_directory)
         # CSVの書き出し
-        stock_csv.to_csv(os.path.join(export_dir, os.path.basename(file_path)))
+        stock_csv.to_csv(os.path.join(export_directory, os.path.basename(file_path)))
